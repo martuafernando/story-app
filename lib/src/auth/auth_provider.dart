@@ -25,7 +25,6 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
 
       return result;
-
     } catch (e) {
       isLoggedIn = false;
       isLoading = false;
@@ -34,7 +33,6 @@ class AuthProvider extends ChangeNotifier {
 
       notifyListeners();
       return false;
-
     } finally {
       isLoading = false;
       notifyListeners();
@@ -52,7 +50,6 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
 
       return result;
-
     } catch (e) {
       isLoading = false;
       message = e.toString();
@@ -60,7 +57,6 @@ class AuthProvider extends ChangeNotifier {
 
       notifyListeners();
       return false;
-
     } finally {
       isLoading = false;
       notifyListeners();
@@ -79,7 +75,6 @@ class AuthProvider extends ChangeNotifier {
 
       notifyListeners();
       return isSignOut;
-
     } catch (e) {
       isLoggedIn = false;
       isLoading = false;
@@ -88,7 +83,6 @@ class AuthProvider extends ChangeNotifier {
 
       notifyListeners();
       return false;
-
     } finally {
       isLoading = false;
       notifyListeners();

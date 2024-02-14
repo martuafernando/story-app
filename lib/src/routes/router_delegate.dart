@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:story_app/src/auth/auth_repository.dart';
 import 'package:story_app/src/auth/login_view.dart';
 import 'package:story_app/src/auth/register_view.dart';
-import 'package:story_app/src/story_feature/story_item_list_view.dart';
+import 'package:story_app/src/story_feature/story_list_view.dart';
 
 class AppRouterDelegate extends RouterDelegate
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {

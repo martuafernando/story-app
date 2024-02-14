@@ -1,39 +1,41 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:story_app/src/story_feature/dto/story_detail_dto.dart';
+import 'package:story_app/src/story_feature/dto/story_list_dto.dart';
 
 void main() {
   group('Story List response', () {
     test('should parsed correctly', () {
       // Arrange
-      const storyDetailResponse = {
+      const storyListResponse = {
         "error": false,
-        "message": "Story fetched successfully",
-        "story": {
-          "id": "story-FvU4u0Vp2S3PMsFg",
-          "name": "Dimas",
-          "description": "Lorem Ipsum",
-          "photoUrl":
-              "https://story-api.dicoding.dev/images/stories/photos-1641623658595_dummy-pic.png",
-          "createdAt": "2022-01-08T06:34:18.598Z",
-          "lat": -10.212,
-          "lon": -16.002
-        }
+        "message": "Stories fetched successfully",
+        "listStory": [
+          {
+            "id": "story-Asko3-WPRHlqBnIs",
+            "name": "someone28",
+            "description": "Lorem Ipsum",
+            "photoUrl":
+                "xxx",
+            "createdAt": "2024-02-13T12:16:05.599Z",
+            "lat": null,
+            "lon": null
+          },
+        ]
       };
 
       // Act
-      final result = StoryDetailResponse.fromJson(storyDetailResponse);
+      final result = StoryListResponse.fromJson(storyListResponse);
 
       // Assert
       expect(result.error, false);
-      expect(result.message, "Story fetched successfully");
-      expect(result.story.id, "story-FvU4u0Vp2S3PMsFg");
-      expect(result.story.name, "Dimas");
-      expect(result.story.description, "Lorem Ipsum");
-      expect(result.story.photoUrl,
-          "https://story-api.dicoding.dev/images/stories/photos-1641623658595_dummy-pic.png");
-      expect(result.story.createdAt, DateTime.parse("2022-01-08T06:34:18.598Z"));
-      expect(result.story.lat, -10.212);
-      expect(result.story.lon, -16.002);
+      expect(result.message, "Stories fetched successfully");
+      expect(result.storyList[0].id, "story-Asko3-WPRHlqBnIs");
+      expect(result.storyList[0].name, "someone28");
+      expect(result.storyList[0].description, "Lorem Ipsum");
+      expect(result.storyList[0].photoUrl, "xxx");
+      expect(
+          result.storyList[0].createdAt, DateTime.parse("2024-02-13T12:16:05.599Z"));
+      expect(result.storyList[0].lat, null);
+      expect(result.storyList[0].lon, null);
     });
   });
 }

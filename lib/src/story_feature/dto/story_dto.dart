@@ -18,10 +18,7 @@ class StoryResponse {
   final bool error;
   final String message;
 
-  StoryResponse({
-    required this.error,
-    required this.message
-  });
+  StoryResponse({required this.error, required this.message});
 
   factory StoryResponse.fromJson(Map<String, dynamic> json) {
     return StoryResponse(

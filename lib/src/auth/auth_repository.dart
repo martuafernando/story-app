@@ -14,12 +14,18 @@ class AuthRepository {
 
   Future<bool> isLoggedIn() async {
     final preferences = await SharedPreferences.getInstance();
-    return !(preferences.getString(_stateKey) == '' || preferences.getString(_stateKey) == null);
+    return !(preferences.getString(_stateKey) == '' ||
+        preferences.getString(_stateKey) == null);
   }
 
   Future<bool> saveToken(String token) async {
     final preferences = await SharedPreferences.getInstance();
     return preferences.setString(_stateKey, token);
+  }
+
+  Future<String?> getToken() async {
+    final preferences = await SharedPreferences.getInstance();
+    return preferences.getString(_stateKey);
   }
 
   Future<String> signIn(LoginRequest user) async {

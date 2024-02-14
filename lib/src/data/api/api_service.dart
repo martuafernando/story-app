@@ -1,16 +1,24 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:story_app/src/auth/dto/login_dto.dart';
 import 'package:story_app/src/auth/dto/register_dto.dart';
+import 'package:story_app/src/story_feature/dto/story_dto.dart';
 import 'package:story_app/src/story_feature/dto/story_list_dto.dart';
 
 class ApiService {
-  static const String _baseUrl = 'https://story-api.dicoding.dev/v1/';
+  static const String _baseUrl = 'https://story-api.dicoding.dev/v1';
 
-  Future<StoryListResponse> getStoryList() async {
-    final response = await http.get(Uri.parse("$_baseUrl/list"));
+  Future<StoryListResponse> getStoryList(String token) async {
+    final response = await http.get(Uri.parse("$_baseUrl/stories"), headers: {
+      "Authorization": "Bearer $token",
+    });
+    log(name: 'API_SERVICE::GET_STORY_LIST', response.statusCode.toString());
+
     if (response.statusCode == 200) {
+      log('testing::');
       return StoryListResponse.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to get restaurant list');
@@ -60,13 +68,55 @@ class ApiService {
       throw Exception('Invalid content-type');
     }
 
-
-    final registerResponse = RegisterResponse.fromJson(json.decode(response.body));
+    final registerResponse =
+        RegisterResponse.fromJson(json.decode(response.body));
 
     if (response.statusCode == 201) {
       return registerResponse;
     }
 
     throw Exception(registerResponse.message);
+  }
+
+  Future<StoryResponse> uploadStory(
+    List<int> bytes,
+    String fileName,
+    String description,
+  ) async {
+    const String url = "$_baseUrl/stories";
+
+    final uri = Uri.parse(url);
+    var request = http.MultipartRequest('POST', uri);
+
+    final multiPartFile = http.MultipartFile.fromBytes(
+      "photo",
+      bytes,
+      filename: fileName,
+    );
+    final Map<String, String> fields = {
+      "description": description,
+    };
+    final Map<String, String> headers = {
+      "Content-type": "multipart/form-data",
+    };
+
+    request.files.add(multiPartFile);
+    request.fields.addAll(fields);
+    request.headers.addAll(headers);
+
+    final http.StreamedResponse streamedResponse = await request.send();
+    final int statusCode = streamedResponse.statusCode;
+
+    final Uint8List responseList = await streamedResponse.stream.toBytes();
+    final String responseData = String.fromCharCodes(responseList);
+
+    if (statusCode == 201) {
+      final StoryResponse uploadResponse = StoryResponse.fromJson(
+        json.decode(responseData),
+      );
+      return uploadResponse;
+    } else {
+      throw Exception("Upload file error");
+    }
   }
 }

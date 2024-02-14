@@ -6,6 +6,8 @@ import 'package:story_app/src/auth/auth_provider.dart';
 import 'package:story_app/src/auth/auth_repository.dart';
 import 'package:story_app/src/data/api/api_service.dart';
 import 'package:story_app/src/routes/router_delegate.dart';
+import 'package:story_app/src/story_feature/story_provider.dart';
+import 'package:story_app/src/story_feature/story_repository.dart';
 
 import 'settings/settings_controller.dart';
 
@@ -66,6 +68,13 @@ class _MyAppState extends State<MyApp> {
             ChangeNotifierProvider<AuthProvider>(
               create: (_) => AuthProvider(
                   authRepository: AuthRepository(apiService: ApiService())),
+            ),
+            ChangeNotifierProvider<StoryProvider>(
+              create: (_) => StoryProvider(
+                  storyRepository: StoryRepository(
+                apiService: ApiService(),
+                authRepository: AuthRepository(apiService: ApiService()),
+              )),
             ),
           ],
           child: _template(),

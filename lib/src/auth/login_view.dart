@@ -9,7 +9,8 @@ class LoginView extends StatefulWidget {
   final Function goToSignUp;
   final Function goToHomePage;
 
-  const LoginView({super.key, required this.goToSignUp, required this.goToHomePage});
+  const LoginView(
+      {super.key, required this.goToSignUp, required this.goToHomePage});
 
   @override
   State<LoginView> createState() => _LoginViewState();
@@ -128,12 +129,16 @@ class _LoginViewState extends State<LoginView> {
                                       onPressed: () async {
                                         if (formKey.currentState!.validate()) {
                                           String email = emailController.text;
-                                          String password = passwordController.text;
-                                          final user = LoginRequest(email: email, password: password);
+                                          String password =
+                                              passwordController.text;
+                                          final user = LoginRequest(
+                                              email: email, password: password);
                                           final result = await context
                                               .read<AuthProvider>()
                                               .signIn(user);
-                                          if (result) { widget.goToHomePage(); }
+                                          if (result) {
+                                            widget.goToHomePage();
+                                          }
                                         }
                                       },
                                       child: const Text('Sign In'),
@@ -177,8 +182,7 @@ class _LoginViewState extends State<LoginView> {
             content: Text(authProvider.message!),
           ),
         );
-        authProvider
-            .clearMessage();
+        authProvider.clearMessage();
       });
     }
     return PlatformWidget(

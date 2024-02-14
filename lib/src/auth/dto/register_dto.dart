@@ -3,11 +3,8 @@ class RegisterRequest {
   final String email;
   final String password;
 
-  RegisterRequest({
-    required this.name,
-    required this.email,
-    required this.password
-  });
+  RegisterRequest(
+      {required this.name, required this.email, required this.password});
 
   Map<String, dynamic> toJson() {
     return {
@@ -22,10 +19,7 @@ class RegisterResponse {
   final bool error;
   final String message;
 
-  RegisterResponse({
-    required this.error,
-    required this.message
-  });
+  RegisterResponse({required this.error, required this.message});
 
   factory RegisterResponse.fromJson(Map<String, dynamic> json) {
     return RegisterResponse(
