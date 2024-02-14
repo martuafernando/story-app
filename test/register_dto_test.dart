@@ -5,10 +5,7 @@ void main() {
   group('Register response', () {
     test('should parsed correctly', () {
       // Arrange
-      const registerResponse = {
-        "error": false,
-        "message": "User Created"
-      };
+      const registerResponse = {"error": false, "message": "User Created"};
 
       // Act
       final result = RegisterResponse.fromJson(registerResponse);

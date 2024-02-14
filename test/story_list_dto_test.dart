@@ -13,8 +13,7 @@ void main() {
             "id": "story-Asko3-WPRHlqBnIs",
             "name": "someone28",
             "description": "Lorem Ipsum",
-            "photoUrl":
-                "xxx",
+            "photoUrl": "xxx",
             "createdAt": "2024-02-13T12:16:05.599Z",
             "lat": null,
             "lon": null
@@ -33,7 +32,9 @@ void main() {
       expect(result.storyList[0].description, "Lorem Ipsum");
       expect(result.storyList[0].photoUrl, "xxx");
       expect(
-          result.storyList[0].createdAt, DateTime.parse("2024-02-13T12:16:05.599Z"));
+        result.storyList[0].createdAt,
+        DateTime.parse("2024-02-13T12:16:05.599Z"),
+      );
       expect(result.storyList[0].lat, null);
       expect(result.storyList[0].lon, null);
     });

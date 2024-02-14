@@ -16,23 +16,35 @@ class ApiService {
     final response = await http.get(Uri.parse("$_baseUrl/stories"), headers: {
       "Authorization": "Bearer $token",
     });
-    log(name: 'API_SERVICE::GET_STORY_LIST', response.statusCode.toString());
+    log(
+      name: 'API_SERVICE::GET_STORY_LIST',
+      response.statusCode.toString(),
+    );
 
     if (response.statusCode == 200) {
-      return StoryListResponse.fromJson(json.decode(response.body));
+      return StoryListResponse.fromJson(
+        json.decode(response.body),
+      );
     } else {
       throw Exception('Failed to get restaurant list');
     }
   }
 
-  Future<StoryDetailResponse> getStoryDetail(String token, String storyId) async {
-    final response = await http.get(Uri.parse("$_baseUrl/stories/$storyId"), headers: {
+  Future<StoryDetailResponse> getStoryDetail(
+      String token, String storyId) async {
+    final response =
+        await http.get(Uri.parse("$_baseUrl/stories/$storyId"), headers: {
       "Authorization": "Bearer $token",
     });
-    log(name: 'API_SERVICE::GET_STORY_DETAIL', response.statusCode.toString());
+    log(
+      name: 'API_SERVICE::GET_STORY_DETAIL',
+      response.statusCode.toString(),
+    );
 
     if (response.statusCode == 200) {
-      return StoryDetailResponse.fromJson(json.decode(response.body));
+      return StoryDetailResponse.fromJson(
+        json.decode(response.body),
+      );
     } else {
       throw Exception('Failed to get restaurant list');
     }
@@ -55,7 +67,9 @@ class ApiService {
       throw Exception('Invalid content-type');
     }
 
-    final loginResponse = LoginResponse.fromJson(json.decode(response.body));
+    final loginResponse = LoginResponse.fromJson(
+      json.decode(response.body),
+    );
 
     if (response.statusCode == 200) {
       return loginResponse;
@@ -81,8 +95,9 @@ class ApiService {
       throw Exception('Invalid content-type');
     }
 
-    final registerResponse =
-        RegisterResponse.fromJson(json.decode(response.body));
+    final registerResponse = RegisterResponse.fromJson(
+      json.decode(response.body),
+    );
 
     if (response.statusCode == 201) {
       return registerResponse;
@@ -92,9 +107,12 @@ class ApiService {
   }
 
   Future<AddStoryResponse> uploadStory(
-    List<int> bytes,
-    String fileName,
-    String description,
+    String token,
+    {
+      required List<int> bytes,
+      required String fileName,
+      required String description,
+    }
   ) async {
     const String url = "$_baseUrl/stories";
 
@@ -111,6 +129,7 @@ class ApiService {
     };
     final Map<String, String> headers = {
       "Content-type": "multipart/form-data",
+      "Authorization": "Bearer $token",
     };
 
     request.files.add(multiPartFile);
@@ -122,6 +141,11 @@ class ApiService {
 
     final Uint8List responseList = await streamedResponse.stream.toBytes();
     final String responseData = String.fromCharCodes(responseList);
+
+    log(
+      name: 'API_SERVICE::UPLOAD_STORY',
+      statusCode.toString(),
+    );
 
     if (statusCode == 201) {
       final AddStoryResponse uploadResponse = AddStoryResponse.fromJson(

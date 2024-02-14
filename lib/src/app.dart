@@ -6,6 +6,7 @@ import 'package:story_app/src/auth/auth_provider.dart';
 import 'package:story_app/src/auth/auth_repository.dart';
 import 'package:story_app/src/data/api/api_service.dart';
 import 'package:story_app/src/routes/router_delegate.dart';
+import 'package:story_app/src/story_feature/add_story_provider.dart';
 import 'package:story_app/src/story_feature/story_provider.dart';
 import 'package:story_app/src/story_feature/story_repository.dart';
 
@@ -54,8 +55,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    appRouterDelegate =
-        AppRouterDelegate(AuthRepository(apiService: ApiService()));
+    appRouterDelegate = AppRouterDelegate(
+      AuthRepository(
+        apiService: ApiService(),
+      ),
+    );
   }
 
   @override
@@ -67,14 +71,30 @@ class _MyAppState extends State<MyApp> {
           providers: [
             ChangeNotifierProvider<AuthProvider>(
               create: (_) => AuthProvider(
-                  authRepository: AuthRepository(apiService: ApiService())),
+                authRepository: AuthRepository(
+                  apiService: ApiService(),
+                ),
+              ),
             ),
             ChangeNotifierProvider<StoryProvider>(
               create: (_) => StoryProvider(
-                  storyRepository: StoryRepository(
-                apiService: ApiService(),
-                authRepository: AuthRepository(apiService: ApiService()),
-              )),
+                storyRepository: StoryRepository(
+                  apiService: ApiService(),
+                  authRepository: AuthRepository(
+                    apiService: ApiService(),
+                  ),
+                ),
+              ),
+            ),
+            ChangeNotifierProvider<AddStoryProvider>(
+              create: (_) => AddStoryProvider(
+                storyRepository: StoryRepository(
+                  apiService: ApiService(),
+                  authRepository: AuthRepository(
+                    apiService: ApiService(),
+                  ),
+                ),
+              ),
             ),
           ],
           child: _template(),

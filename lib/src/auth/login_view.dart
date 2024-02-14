@@ -124,7 +124,7 @@ class _LoginViewState extends State<LoginView> {
                               width: double.infinity,
                               child: context.watch<AuthProvider>().isLoading
                                   ? const Center(
-                                      child: CircularProgressIndicator())
+                                      child: CircularProgressIndicator(),)
                                   : ElevatedButton(
                                       onPressed: () async {
                                         if (formKey.currentState!.validate()) {
@@ -166,9 +166,9 @@ class _LoginViewState extends State<LoginView> {
                               ],
                             ),
                           ],
-                        )),
+                        ),),
                   ],
-                ))));
+                ),)),);
   }
 
   @override

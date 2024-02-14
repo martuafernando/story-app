@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:story_app/src/story_feature/model/story.dart';
 
-String storyDetailResponseToJson(StoryDetailResponse data) =>
-    json.encode(data.toJson());
+String storyDetailResponseToJson(StoryDetailResponse data) => json.encode(
+      data.toJson(),
+    );
 
 class StoryDetailResponse {
   final bool error;

@@ -31,7 +31,10 @@ void main() {
       expect(result.story.description, "Lorem Ipsum");
       expect(result.story.photoUrl,
           "https://story-api.dicoding.dev/images/stories/photos-1641623658595_dummy-pic.png");
-      expect(result.story.createdAt, DateTime.parse("2022-01-08T06:34:18.598Z"));
+      expect(
+        result.story.createdAt,
+        DateTime.parse("2022-01-08T06:34:18.598Z"),
+      );
       expect(result.story.lat, -10.212);
       expect(result.story.lon, -16.002);
     });

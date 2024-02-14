@@ -7,18 +7,22 @@ import 'package:story_app/src/story_feature/widget/card_story.dart';
 class StoryListView extends StatelessWidget {
   final Function onSignOut;
   final Function onTapped;
+  final Function goToAddStory;
   final List<Story> items;
 
   const StoryListView(
       {super.key,
       this.items = const [],
       required this.onSignOut,
-      required this.onTapped});
+      required this.onTapped,
+      required this.goToAddStory});
 
   Widget _buildList(BuildContext context) {
     return Consumer<StoryProvider>(builder: (context, provider, _) {
       if (provider.state == ResultState.loading) {
-        return const Center(child: CircularProgressIndicator());
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
       }
 
       if (provider.state == ResultState.hasData) {
@@ -54,46 +58,51 @@ class StoryListView extends StatelessWidget {
         );
       }
 
-      return const Material(child: Text(''));
+      return const Material(
+        child: Text(''),
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Story App'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {},
-            ),
-          ],
-        ),
-        floatingActionButton: Stack(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 32),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: FloatingActionButton(
-                  onPressed: () {},
-                  child: const Icon(Icons.add),
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
+      appBar: AppBar(
+        title: const Text('Story App'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 32),
+            child: Align(
+              alignment: Alignment.bottomCenter,
               child: FloatingActionButton(
                 onPressed: () {
-                  onSignOut();
+                  goToAddStory();
                 },
-                backgroundColor: Colors.red,
-                child: const Icon(Icons.logout_outlined),
+                child: const Icon(Icons.add),
               ),
             ),
-          ],
-        ),
-        body: _buildList(context));
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton(
+              onPressed: () {
+                onSignOut();
+              },
+              backgroundColor: Colors.red,
+              child: const Icon(Icons.logout_outlined),
+            ),
+          ),
+        ],
+      ),
+      body: _buildList(context),
+    );
   }
 }

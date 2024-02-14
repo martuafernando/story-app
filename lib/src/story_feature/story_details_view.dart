@@ -33,7 +33,9 @@ class _StoryDetailsViewState extends State<StoryDetailsView> {
 Widget _buildPage(BuildContext context, String storyId) {
   return Consumer<StoryProvider>(builder: (context, provider, _) {
     if (provider.state == ResultState.loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
     }
 
     if (provider.state == ResultState.hasData) {
@@ -60,7 +62,9 @@ Widget _buildPage(BuildContext context, String storyId) {
       );
     }
 
-    return const Material(child: Text(''));
+    return const Material(
+      child: Text(''),
+    );
   });
 }
 
@@ -68,31 +72,40 @@ Widget _pageTemplate(BuildContext context, Story story) {
   return SingleChildScrollView(
     child: Column(
       children: [
-        Image.network(story.photoUrl,
-            width: double.infinity,
-            errorBuilder: (ctx, error, _) => const SizedBox(
-                  width: 100,
-                  child: Icon(Icons.error),
-                ),
-            loadingBuilder: (context, child, loadingProgress) =>
-                _loadingBuilder(context, child, loadingProgress)),
+        Image.network(
+          story.photoUrl,
+          width: double.infinity,
+          errorBuilder: (ctx, error, _) => const SizedBox(
+            width: 100,
+            child: Icon(Icons.error),
+          ),
+          loadingBuilder: (context, child, loadingProgress) =>
+              _loadingBuilder(context, child, loadingProgress),
+        ),
         const SizedBox(height: 16),
         Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                _informationTemplate(context, label: 'Name', data: story.name),
-                const SizedBox(height: 8),
-                _informationTemplate(context, label: 'Description', data: story.description),
-                const SizedBox(height: 8),
-                _informationTemplate(context, label: 'Latitude', data: story.lat),
-                const SizedBox(height: 8),
-                _informationTemplate(context, label: 'Longitude', data: story.lon),
-                const SizedBox(height: 8),
-                _informationTemplate(context, label: 'Created At', data: story.createdAt.toLocal()),
-                const SizedBox(height: 8),
-              ],
-            )),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              _informationTemplate(context, label: 'Name', data: story.name),
+              const SizedBox(height: 8),
+              _informationTemplate(context,
+                  label: 'Description', data: story.description),
+              const SizedBox(height: 8),
+              _informationTemplate(context, label: 'Latitude', data: story.lat),
+              const SizedBox(height: 8),
+              _informationTemplate(context,
+                  label: 'Longitude', data: story.lon),
+              const SizedBox(height: 8),
+              _informationTemplate(
+                context,
+                label: 'Created At',
+                data: story.createdAt.toLocal(),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
       ],
     ),
   );

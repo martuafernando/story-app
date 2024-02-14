@@ -10,7 +10,7 @@ class StoryProvider extends ChangeNotifier {
   final StoryRepository storyRepository;
 
   StoryProvider({required this.storyRepository}) {
-    _fetchAllStory();
+    fetchAllStory();
   }
 
   late ResultState _state;
@@ -23,13 +23,16 @@ class StoryProvider extends ChangeNotifier {
   List<Story> get storyList => _storyList;
   Story get story => _story;
 
-  Future<void> _fetchAllStory() async {
+  Future<void> fetchAllStory() async {
     try {
       _state = ResultState.loading;
       notifyListeners();
 
       final response = await storyRepository.getStoryList();
-      log(name: 'STORY_PROVIDER::FETCH_ALL_STORY', response.toString());
+      log(
+        name: 'STORY_PROVIDER::FETCH_ALL_STORY',
+        response.toString(),
+      );
 
       if (response.isEmpty) {
         _state = ResultState.noData;
@@ -43,7 +46,10 @@ class StoryProvider extends ChangeNotifier {
     } catch (e) {
       _state = ResultState.error;
       notifyListeners();
-      log(name: 'STORY_PROVIDER::FETCH_ALL_STORY', e.toString());
+      log(
+        name: 'STORY_PROVIDER::FETCH_ALL_STORY',
+        e.toString(),
+      );
       _message = 'Error --> $e';
     }
   }
@@ -51,24 +57,38 @@ class StoryProvider extends ChangeNotifier {
   Future<void> fetchDetailStory(String storyId) async {
     try {
       _state = ResultState.loading;
-      Future.microtask(() => notifyListeners());
+      Future.microtask(
+        () => notifyListeners(),
+      );
 
       final response = await storyRepository.getStoryDetail(storyId);
-      log(name: 'STORY_PROVIDER::FETCH_STORY_DETAIL', response.toString());
+      log(
+        name: 'STORY_PROVIDER::FETCH_STORY_DETAIL',
+        response.toString(),
+      );
 
       if (response == null) {
         _state = ResultState.noData;
-        Future.microtask(() => notifyListeners());
+        Future.microtask(
+          () => notifyListeners(),
+        );
         _message = 'Empty Data';
       }
 
       _state = ResultState.hasData;
       _story = response!;
-      Future.microtask(() => notifyListeners());
+      Future.microtask(
+        () => notifyListeners(),
+      );
     } catch (e) {
       _state = ResultState.error;
-      Future.microtask(() => notifyListeners());
-      log(name: 'STORY_PROVIDER::FETCH_STORY_DETAIL', e.toString());
+      Future.microtask(
+        () => notifyListeners(),
+      );
+      log(
+        name: 'STORY_PROVIDER::FETCH_STORY_DETAIL',
+        e.toString(),
+      );
       _message = 'Error --> $e';
     }
   }

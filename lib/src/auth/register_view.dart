@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -144,7 +142,7 @@ class _RegisterViewState extends State<RegisterView> {
                               width: double.infinity,
                               child: context.watch<AuthProvider>().isLoading
                                   ? const Center(
-                                      child: CircularProgressIndicator())
+                                      child: CircularProgressIndicator(),)
                                   : ElevatedButton(
                                       onPressed: () async {
                                         if (formKey.currentState!.validate()) {
@@ -183,9 +181,9 @@ class _RegisterViewState extends State<RegisterView> {
                               ],
                             ),
                           ],
-                        )),
+                        ),),
                   ],
-                ))));
+                ),)),);
   }
 
   @override
