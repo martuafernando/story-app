@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:story_app/src/auth/auth_repository.dart';
 import 'package:story_app/src/auth/login_view.dart';
 import 'package:story_app/src/auth/register_view.dart';
+import 'package:story_app/src/story_feature/story_details_view.dart';
 import 'package:story_app/src/story_feature/story_list_view.dart';
 
 class AppRouterDelegate extends RouterDelegate
@@ -17,6 +18,8 @@ class AppRouterDelegate extends RouterDelegate
   List<Page> _historyStack = [];
   bool _isLoggedIn = false;
   bool _isRegister = false;
+
+  String? selectedStoryId;
 
   _init() async {
     _isLoggedIn = await authRepository.isLoggedIn();
@@ -51,16 +54,26 @@ class AppRouterDelegate extends RouterDelegate
       ];
 
   List<Page> get _loggedInStack => [
-        if (!_isRegister)
+        MaterialPage(
+            key: const ValueKey("StoryListView"),
+            child: StoryListView(
+              onTapped: (id) {
+                selectedStoryId = id;
+                notifyListeners();
+              },
+              onSignOut: () {
+                _isLoggedIn = false;
+                notifyListeners();
+              },
+              items: const [],
+            )),
+        if (selectedStoryId != null)
           MaterialPage(
-              key: const ValueKey("StoryListView"),
-              child: StoryListView(
-                onSignOut: () {
-                  _isLoggedIn = false;
-                  notifyListeners();
-                },
-                items: const [],
-              )),
+            key: const ValueKey("StoryDetailsView"),
+            child: StoryDetailsView(
+              storyId: selectedStoryId!,
+            ),
+          ),
       ];
 
   @override
@@ -84,6 +97,7 @@ class AppRouterDelegate extends RouterDelegate
         }
 
         _isRegister = false;
+        selectedStoryId = null;
         notifyListeners();
 
         return true;

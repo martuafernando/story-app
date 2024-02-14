@@ -6,10 +6,14 @@ import 'package:story_app/src/story_feature/widget/card_story.dart';
 
 class StoryListView extends StatelessWidget {
   final Function onSignOut;
+  final Function onTapped;
   final List<Story> items;
 
   const StoryListView(
-      {super.key, this.items = const [], required this.onSignOut});
+      {super.key,
+      this.items = const [],
+      required this.onSignOut,
+      required this.onTapped});
 
   Widget _buildList(BuildContext context) {
     return Consumer<StoryProvider>(builder: (context, provider, _) {
@@ -20,10 +24,13 @@ class StoryListView extends StatelessWidget {
       if (provider.state == ResultState.hasData) {
         return ListView.builder(
           shrinkWrap: true,
-          itemCount: provider.result.length,
+          itemCount: provider.storyList.length,
           itemBuilder: (context, index) {
-            var story = provider.result[index];
-            return CardStory(story: story);
+            var story = provider.storyList[index];
+            return CardStory(
+              story: story,
+              onTapped: onTapped,
+            );
           },
         );
       }

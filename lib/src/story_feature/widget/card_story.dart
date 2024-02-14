@@ -3,50 +3,56 @@ import 'package:story_app/src/story_feature/model/story.dart';
 
 class CardStory extends StatelessWidget {
   final Story story;
+  final Function onTapped;
 
-  const CardStory({super.key, required this.story});
+  const CardStory({super.key, required this.story, required this.onTapped});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      elevation: 8,
-      margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      child: Column(
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
+    return GestureDetector(
+      onTap: () {
+        onTapped(story.id);
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 8,
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        child: Column(
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+              child: Image.network(
+                story.photoUrl,
+                width: double.infinity,
+                height: 200,
+                fit: BoxFit.cover,
+                loadingBuilder: _loadingBuilder,
+              ),
             ),
-            child: Image.network(
-              story.photoUrl,
+            Container(
               width: double.infinity,
-              height: 200,
-              fit: BoxFit.cover,
-              loadingBuilder: _loadingBuilder,
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(story.name,
+                      style: Theme.of(context).textTheme.headlineSmall),
+                  Text(story.description,
+                      style: Theme.of(context).textTheme.bodyMedium),
+                  const SizedBox(height: 16),
+                  _informationTemplate(context, label: 'Lat', data: story.lat),
+                  const SizedBox(height: 8),
+                  _informationTemplate(context, label: 'Lon', data: story.lon),
+                ],
+              ),
             ),
-          ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(story.name,
-                    style: Theme.of(context).textTheme.headlineSmall),
-                Text(story.description,
-                    style: Theme.of(context).textTheme.bodyMedium),
-                const SizedBox(height: 16),
-                _informationTemplate(context, label: 'Lat', data: story.lat),
-                const SizedBox(height: 8),
-                _informationTemplate(context, label: 'Lon', data: story.lon),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

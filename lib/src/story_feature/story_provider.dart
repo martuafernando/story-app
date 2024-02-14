@@ -15,13 +15,15 @@ class StoryProvider extends ChangeNotifier {
 
   late ResultState _state;
   late List<Story> _storyList = [];
+  late Story _story;
   String _message = '';
 
   String get message => _message;
   ResultState get state => _state;
-  List<Story> get result => _storyList;
+  List<Story> get storyList => _storyList;
+  Story get story => _story;
 
-  Future<dynamic> _fetchAllStory() async {
+  Future<void> _fetchAllStory() async {
     try {
       _state = ResultState.loading;
       notifyListeners();
@@ -32,17 +34,42 @@ class StoryProvider extends ChangeNotifier {
       if (response.isEmpty) {
         _state = ResultState.noData;
         notifyListeners();
-        return _message = 'Empty Data';
+        _message = 'Empty Data';
       }
 
       _state = ResultState.hasData;
       notifyListeners();
-      return _storyList = response;
+      _storyList = response;
     } catch (e) {
       _state = ResultState.error;
       notifyListeners();
       log(name: 'STORY_PROVIDER::FETCH_ALL_STORY', e.toString());
-      return _message = 'Error --> $e';
+      _message = 'Error --> $e';
+    }
+  }
+
+  Future<void> fetchDetailStory(String storyId) async {
+    try {
+      _state = ResultState.loading;
+      Future.microtask(() => notifyListeners());
+
+      final response = await storyRepository.getStoryDetail(storyId);
+      log(name: 'STORY_PROVIDER::FETCH_STORY_DETAIL', response.toString());
+
+      if (response == null) {
+        _state = ResultState.noData;
+        Future.microtask(() => notifyListeners());
+        _message = 'Empty Data';
+      }
+
+      _state = ResultState.hasData;
+      _story = response!;
+      Future.microtask(() => notifyListeners());
+    } catch (e) {
+      _state = ResultState.error;
+      Future.microtask(() => notifyListeners());
+      log(name: 'STORY_PROVIDER::FETCH_STORY_DETAIL', e.toString());
+      _message = 'Error --> $e';
     }
   }
 }

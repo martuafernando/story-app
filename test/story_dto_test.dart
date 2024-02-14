@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:story_app/src/story_feature/dto/story_dto.dart';
+import 'package:story_app/src/story_feature/dto/add_story_dto.dart';
 
 void main() {
   group('Story response', () {
@@ -8,7 +8,7 @@ void main() {
       const registerResponse = {"error": false, "message": "User Created"};
 
       // Act
-      final result = StoryResponse.fromJson(registerResponse);
+      final result = AddStoryResponse.fromJson(registerResponse);
 
       // Assert
       expect(result.error, false);

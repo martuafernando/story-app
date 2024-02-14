@@ -1,12 +1,12 @@
 import 'dart:io';
 
-class StoryRequest {
+class AddStoryRequest {
   final String description;
   final File photo;
   final double? lat;
   final double? lon;
 
-  StoryRequest({
+  AddStoryRequest({
     required this.description,
     required this.photo,
     this.lat,
@@ -14,14 +14,14 @@ class StoryRequest {
   });
 }
 
-class StoryResponse {
+class AddStoryResponse {
   final bool error;
   final String message;
 
-  StoryResponse({required this.error, required this.message});
+  AddStoryResponse({required this.error, required this.message});
 
-  factory StoryResponse.fromJson(Map<String, dynamic> json) {
-    return StoryResponse(
+  factory AddStoryResponse.fromJson(Map<String, dynamic> json) {
+    return AddStoryResponse(
       error: json['error'],
       message: json['message'],
     );
