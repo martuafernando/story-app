@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:story_app/src/auth/dto/login_dto.dart';
 import 'package:story_app/src/auth/dto/register_dto.dart';
@@ -7,6 +9,7 @@ class AuthRepository {
   final ApiService apiService;
 
   final String _stateKey = "auth-token";
+  final String _stateExpKey = "auth-token-exp";
 
   const AuthRepository({
     required this.apiService,
@@ -20,12 +23,23 @@ class AuthRepository {
 
   Future<bool> saveToken(String token) async {
     final preferences = await SharedPreferences.getInstance();
-    return preferences.setString(_stateKey, token);
+    return Future.wait([
+      preferences.setString(_stateKey, token),
+      preferences.setString(
+          _stateExpKey, DateTime.now().add(const Duration(hours: 1)).toString())
+    ]).then((value) => value.every((element) => element));
   }
 
   Future<String?> getToken() async {
     final preferences = await SharedPreferences.getInstance();
-    return preferences.getString(_stateKey);
+    final expiredTime = preferences.getString(_stateExpKey);
+    if (expiredTime == null) {
+      return null;
+    }
+    final isExpired = DateTime.parse(preferences.getString(_stateExpKey)!)
+        .isBefore(DateTime.now());
+
+    return isExpired ? null : preferences.getString(_stateKey);
   }
 
   Future<String> signIn(LoginRequest user) async {
