@@ -17,8 +17,24 @@ class AuthRepository {
 
   Future<bool> isLoggedIn() async {
     final preferences = await SharedPreferences.getInstance();
-    return !(preferences.getString(_stateKey) == '' ||
-        preferences.getString(_stateKey) == null);
+    final expiredTime = preferences.getString(_stateExpKey);
+    
+    if (expiredTime == null || expiredTime == '') {
+      return false;
+    }
+
+    final isExpired = DateTime.parse(preferences.getString(_stateExpKey)!)
+        .isBefore(DateTime.now());
+
+    if (isExpired) {
+      preferences.setString(_stateKey, '');
+      preferences.setString(_stateExpKey, '');
+      return false;
+    }
+
+    log('TESTING:: ${preferences.getString(_stateKey)}');
+    return !((preferences.getString(_stateKey) == '' ||
+        preferences.getString(_stateKey) == null));
   }
 
   Future<bool> saveToken(String token) async {
@@ -60,6 +76,9 @@ class AuthRepository {
 
   Future<bool> signOut() async {
     final preferences = await SharedPreferences.getInstance();
-    return preferences.setString(_stateKey, '');
+    return Future.wait([
+      preferences.setString(_stateKey, ''),
+      preferences.setString(_stateExpKey, '')
+    ]).then((value) => value.every((element) => element));
   }
 }

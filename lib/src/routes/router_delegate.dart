@@ -70,6 +70,7 @@ class AppRouterDelegate extends RouterDelegate
             },
             onSignOut: () {
               _isLoggedIn = false;
+              authRepository.signOut();
               notifyListeners();
             },
             goToAddStory: () {
@@ -98,7 +99,7 @@ class AppRouterDelegate extends RouterDelegate
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoggedIn == false) {
+    if (_isLoggedIn != true) {
       _historyStack = authPages;
     } else {
       _historyStack = _loggedInStack;
