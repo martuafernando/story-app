@@ -15,10 +15,10 @@ import 'settings/settings_provider.dart';
 class MyApp extends StatefulWidget {
   const MyApp({
     super.key,
-    required this.settingsController,
+    required this.settingsProvider,
   });
 
-  final SettingsProvider settingsController;
+  final SettingsProvider settingsProvider;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
           AppLocalizations.of(context)!.appTitle,
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
-      themeMode: widget.settingsController.themeMode,
+      themeMode: widget.settingsProvider.themeMode,
       home: Router(
         routerDelegate: appRouterDelegate,
         backButtonDispatcher: RootBackButtonDispatcher(),
@@ -59,14 +59,14 @@ class _MyAppState extends State<MyApp> {
       authrepository:AuthRepository(
         apiService: ApiService(),
       ),
-      settingsController: widget.settingsController,
+      settingsController: widget.settingsProvider,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: widget.settingsController,
+      listenable: widget.settingsProvider,
       builder: (BuildContext context, Widget? child) {
         return MultiProvider(
           providers: [

@@ -15,6 +15,6 @@ void main() async {
   await settingsController.loadSettings();
 
   runApp(
-    MyApp(settingsController: settingsController),
+    MyApp(settingsProvider: settingsController),
   );
 }
