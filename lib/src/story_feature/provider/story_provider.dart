@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:story_app/src/story_feature/model/story.dart';
-import 'package:story_app/src/story_feature/story_repository.dart';
+import 'package:story_app/src/story_feature/provider/story_repository.dart';
 
 enum ResultState { loading, noData, hasData, error }
 

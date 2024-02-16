@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:story_app/src/auth/auth_repository.dart';
 import 'package:story_app/src/auth/dto/login_dto.dart';
@@ -70,9 +68,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      log('TESTING::');
       final isSignOut = await authRepository.signOut();
-      log('TESTING:: $isSignOut');
       isLoggedIn = false;
       isLoading = false;
 

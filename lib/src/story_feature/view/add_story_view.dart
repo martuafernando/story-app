@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/src/shared/widget/platform_widget.dart';
-import 'package:story_app/src/story_feature/add_story_provider.dart';
+import 'package:story_app/src/story_feature/provider/add_story_provider.dart';
 
 class AddStoryView extends StatefulWidget {
   const AddStoryView({super.key});

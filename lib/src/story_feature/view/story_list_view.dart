@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/src/story_feature/model/story.dart';
-import 'package:story_app/src/story_feature/story_provider.dart';
+import 'package:story_app/src/story_feature/provider/story_provider.dart';
 import 'package:story_app/src/story_feature/widget/card_story.dart';
 
 class StoryListView extends StatelessWidget {
   final Function onSignOut;
   final Function onTapped;
   final Function goToAddStory;
+  final Function goToSettingView;
   final List<Story> items;
 
-  const StoryListView(
-      {super.key,
-      this.items = const [],
-      required this.onSignOut,
-      required this.onTapped,
-      required this.goToAddStory});
+  const StoryListView({
+    super.key,
+    this.items = const [],
+    required this.onSignOut,
+    required this.onTapped,
+    required this.goToAddStory,
+    required this.goToSettingView,
+  });
 
   Widget _buildList(BuildContext context) {
     return Consumer<StoryProvider>(builder: (context, provider, _) {
@@ -72,7 +75,7 @@ class StoryListView extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () {},
+            onPressed: () { goToSettingView(); },
           ),
         ],
       ),

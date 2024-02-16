@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:story_app/src/auth/dto/login_dto.dart';
 import 'package:story_app/src/auth/dto/register_dto.dart';
@@ -18,7 +16,7 @@ class AuthRepository {
   Future<bool> isLoggedIn() async {
     final preferences = await SharedPreferences.getInstance();
     final expiredTime = preferences.getString(_stateExpKey);
-    
+
     if (expiredTime == null || expiredTime == '') {
       return false;
     }
@@ -32,7 +30,6 @@ class AuthRepository {
       return false;
     }
 
-    log('TESTING:: ${preferences.getString(_stateKey)}');
     return !((preferences.getString(_stateKey) == '' ||
         preferences.getString(_stateKey) == null));
   }

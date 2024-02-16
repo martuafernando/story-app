@@ -6,11 +6,11 @@ import 'package:story_app/src/auth/auth_provider.dart';
 import 'package:story_app/src/auth/auth_repository.dart';
 import 'package:story_app/src/data/api/api_service.dart';
 import 'package:story_app/src/routes/router_delegate.dart';
-import 'package:story_app/src/story_feature/add_story_provider.dart';
-import 'package:story_app/src/story_feature/story_provider.dart';
-import 'package:story_app/src/story_feature/story_repository.dart';
+import 'package:story_app/src/story_feature/provider/add_story_provider.dart';
+import 'package:story_app/src/story_feature/provider/story_provider.dart';
+import 'package:story_app/src/story_feature/provider/story_repository.dart';
 
-import 'settings/settings_controller.dart';
+import 'settings/settings_provider.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({
@@ -18,7 +18,7 @@ class MyApp extends StatefulWidget {
     required this.settingsController,
   });
 
-  final SettingsController settingsController;
+  final SettingsProvider settingsController;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -56,9 +56,10 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     appRouterDelegate = AppRouterDelegate(
-      AuthRepository(
+      authrepository:AuthRepository(
         apiService: ApiService(),
       ),
+      settingsController: widget.settingsController,
     );
   }
 

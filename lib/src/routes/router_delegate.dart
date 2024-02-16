@@ -1,127 +1,82 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:story_app/src/auth/auth_repository.dart';
-import 'package:story_app/src/auth/login_view.dart';
-import 'package:story_app/src/auth/register_view.dart';
-import 'package:story_app/src/story_feature/add_story_view.dart';
-import 'package:story_app/src/story_feature/story_details_view.dart';
-import 'package:story_app/src/story_feature/story_list_view.dart';
-import 'package:story_app/src/story_feature/story_provider.dart';
+import 'package:story_app/src/auth/auth_router_delegate.dart';
+import 'package:story_app/src/settings/settings_provider.dart';
+import 'package:story_app/src/story_feature/story_router_delegate.dart';
+
+enum ActiveService { auth, story }
 
 class AppRouterDelegate extends RouterDelegate
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   final GlobalKey<NavigatorState> _navigatorKey;
-  final AuthRepository authRepository;
 
-  AppRouterDelegate(this.authRepository)
-      : _navigatorKey = GlobalKey<NavigatorState>() {
-    _init();
+  final AuthRepository authRepository;
+  final SettingsProvider settingsController;
+
+  late final AuthRouterDelegate authRouterDelegate;
+  late final StoryRouterDelegate storyRouterDelegate;
+
+  ActiveService activeService = ActiveService.auth;
+
+  AppRouterDelegate._({
+    required this.authRepository,
+    required this.settingsController,
+  }) : _navigatorKey = GlobalKey<NavigatorState>();
+
+  factory AppRouterDelegate({
+    required AuthRepository authrepository,
+    required SettingsProvider settingsController,
+  }) {
+    var delegate = AppRouterDelegate._(
+      authRepository: authrepository,
+      settingsController: settingsController,
+    );
+
+    delegate.authRouterDelegate = AuthRouterDelegate(
+      onAuthenticationSuccess: delegate.onAuthenticationSuccess,
+      authRepository: authrepository,
+    );
+
+    delegate.storyRouterDelegate = StoryRouterDelegate(
+      onSignOutHandler: delegate.onSignOut,
+      settingsController: settingsController,
+    );
+    return delegate;
   }
 
-  List<Page> _historyStack = [];
-  bool _isLoggedIn = false;
-  bool _isAddNewStory = false;
-  bool _isRegister = false;
-  String? _selectedStoryId;
-
-  _init() async {
-    _isLoggedIn = await authRepository.isLoggedIn();
+  void onAuthenticationSuccess() {
+    activeService = ActiveService.story;
     notifyListeners();
   }
 
-  List<Page> get authPages => [
-        if (!_isRegister)
-          MaterialPage(
-            key: const ValueKey("LoginView"),
-            child: LoginView(
-              goToHomePage: () {
-                _isLoggedIn = true;
-                notifyListeners();
-              },
-              goToSignUp: () {
-                _isRegister = true;
-                notifyListeners();
-              },
-            ),
-          ),
-        if (_isRegister)
-          MaterialPage(
-            key: const ValueKey("RegisterView"),
-            child: RegisterView(
-              goToLoginPage: () {
-                Future.microtask(() {
-                  _isRegister = false;
-                  notifyListeners();
-                });
-              },
-            ),
-          ),
-      ];
-
-  List<Page> get _loggedInStack => [
-        MaterialPage(
-          key: const ValueKey("StoryListView"),
-          child: StoryListView(
-            onTapped: (id) {
-              _selectedStoryId = id;
-              notifyListeners();
-            },
-            onSignOut: () {
-              _isLoggedIn = false;
-              authRepository.signOut();
-              notifyListeners();
-            },
-            goToAddStory: () {
-              _isAddNewStory = true;
-              notifyListeners();
-            },
-            items: const [],
-          ),
-        ),
-        if (_selectedStoryId != null)
-          MaterialPage(
-            key: const ValueKey("StoryDetailsView"),
-            child: StoryDetailsView(
-              storyId: _selectedStoryId!,
-            ),
-          ),
-        if (_isAddNewStory)
-          const MaterialPage(
-            key: ValueKey("AddNewStoryView"),
-            child: AddStoryView(),
-          ),
-      ];
+  void onSignOut() {
+    authRepository.signOut();
+    activeService = ActiveService.auth;
+    notifyListeners();
+  }
 
   @override
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoggedIn != true) {
-      _historyStack = authPages;
-    } else {
-      _historyStack = _loggedInStack;
-    }
-
     return Navigator(
       key: navigatorKey,
-      pages: _historyStack,
+      pages: [
+        switch (activeService) {
+          ActiveService.auth => MaterialPage(
+              child: Router(
+                routerDelegate: authRouterDelegate,
+              ),
+            ),
+          ActiveService.story => MaterialPage(
+              child: Router(
+                routerDelegate: storyRouterDelegate,
+              ),
+            ),
+        },
+      ],
       onPopPage: (route, result) {
-        final didPop = route.didPop(result);
-        
-        if (!didPop) {
-          return false;
-        }
-
-        Provider.of<StoryProvider>(context, listen: false).fetchAllStory();
-
-        _isRegister = false;
-        _selectedStoryId = null;
-        _isAddNewStory = false;
-        notifyListeners();
-
         return true;
       },
     );

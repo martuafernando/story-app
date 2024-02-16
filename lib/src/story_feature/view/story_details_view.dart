@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/src/shared/widget/platform_widget.dart';
 import 'package:story_app/src/story_feature/model/story.dart';
-import 'package:story_app/src/story_feature/story_provider.dart';
+import 'package:story_app/src/story_feature/provider/story_provider.dart';
 
 class StoryDetailsView extends StatefulWidget {
   final String storyId;

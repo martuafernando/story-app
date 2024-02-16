@@ -107,13 +107,11 @@ class ApiService {
   }
 
   Future<AddStoryResponse> uploadStory(
-    String token,
-    {
-      required List<int> bytes,
-      required String fileName,
-      required String description,
-    }
-  ) async {
+    String token, {
+    required List<int> bytes,
+    required String fileName,
+    required String description,
+  }) async {
     const String url = "$_baseUrl/stories";
 
     final uri = Uri.parse(url);
