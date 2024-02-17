@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'login_dto.g.dart';
+
+@JsonSerializable()
 class LoginRequest {
   final String email;
   final String password;
@@ -13,17 +18,13 @@ class LoginRequest {
         other.password == password;
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'email': email,
-      'password': password,
-    };
-  }
+  Map<String, dynamic> toJson() => _$LoginRequestToJson(this);
 
   @override
   int get hashCode => Object.hash(email, password);
 }
 
+@JsonSerializable()
 class LoginResponse {
   final bool error;
   final String message;
@@ -35,21 +36,12 @@ class LoginResponse {
     this.loginResult,
   });
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
-        error: json["error"],
-        message: json["message"],
-        loginResult: json["loginResult"] == null
-            ? null
-            : LoginResult.fromJson(json["loginResult"]),
-      );
+  factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "error": error,
-        "message": message,
-        "loginResult": loginResult?.toJson(),
-      };
+  Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
 }
 
+@JsonSerializable()
 class LoginResult {
   final String userId;
   final String name;
@@ -61,15 +53,7 @@ class LoginResult {
     required this.token,
   });
 
-  factory LoginResult.fromJson(Map<String, dynamic> json) => LoginResult(
-        userId: json["userId"],
-        name: json["name"],
-        token: json["token"],
-      );
+  factory LoginResult.fromJson(Map<String, dynamic> json) => _$LoginResultFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "userId": userId,
-        "name": name,
-        "token": token,
-      };
+  Map<String, dynamic> toJson() => _$LoginResultToJson(this);
 }

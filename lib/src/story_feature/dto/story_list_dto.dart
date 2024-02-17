@@ -1,5 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:story_app/src/story_feature/model/story.dart';
 
+part 'story_list_dto.g.dart';
 class StoryListRequest {
   final int? page;
   final int? size;
@@ -12,9 +14,11 @@ class StoryListRequest {
   });
 }
 
+@JsonSerializable()
 class StoryListResponse {
   final bool error;
   final String message;
+  @JsonKey(name: 'listStory')
   final List<Story> storyList;
 
   StoryListResponse({
@@ -23,20 +27,7 @@ class StoryListResponse {
     required this.storyList,
   });
 
-  factory StoryListResponse.fromJson(Map<String, dynamic> json) =>
-      StoryListResponse(
-        error: json["error"],
-        message: json["message"],
-        storyList: List<Story>.from(json["listStory"].map(
-          (x) => Story.fromJson(x),
-        )),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "error": error,
-        "message": message,
-        "listStory": List<dynamic>.from(storyList.map(
-          (x) => x.toJson(),
-        )),
-      };
+  factory StoryListResponse.fromJson(json) => _$StoryListResponseFromJson(json);
+ 
+  Map<String, dynamic> toJson() => _$StoryListResponseToJson(this);
 }

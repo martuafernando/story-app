@@ -1,5 +1,9 @@
 import 'dart:io';
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'add_story_dto.g.dart';
+
 class AddStoryRequest {
   final String description;
   final File photo;
@@ -14,16 +18,15 @@ class AddStoryRequest {
   });
 }
 
+@JsonSerializable()
 class AddStoryResponse {
   final bool error;
   final String message;
 
   AddStoryResponse({required this.error, required this.message});
 
-  factory AddStoryResponse.fromJson(Map<String, dynamic> json) {
-    return AddStoryResponse(
-      error: json['error'],
-      message: json['message'],
-    );
-  }
+  factory AddStoryResponse.fromJson(Map<String, dynamic> json) =>
+      _$AddStoryResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AddStoryResponseToJson(this);
 }
