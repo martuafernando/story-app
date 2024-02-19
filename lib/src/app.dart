@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     appRouterDelegate = AppRouterDelegate(
-      authrepository:AuthRepository(
+      authrepository: AuthRepository(
         apiService: ApiService(),
       ),
       settingsController: widget.settingsProvider,

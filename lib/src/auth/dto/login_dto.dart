@@ -1,13 +1,16 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'login_dto.g.dart';
+part 'login_dto.freezed.dart';
 
-@JsonSerializable()
-class LoginRequest {
-  final String email;
-  final String password;
+@freezed
+class LoginRequest with _$LoginRequest {
+  const LoginRequest._();
 
-  LoginRequest({required this.email, required this.password});
+  const factory LoginRequest({
+    required String email,
+    required String password,
+  }) = _LoginRequest;
 
   @override
   bool operator ==(Object other) {
@@ -18,42 +21,30 @@ class LoginRequest {
         other.password == password;
   }
 
-  Map<String, dynamic> toJson() => _$LoginRequestToJson(this);
-
   @override
   int get hashCode => Object.hash(email, password);
 }
 
-@JsonSerializable()
-class LoginResponse {
-  final bool error;
-  final String message;
-  final LoginResult? loginResult;
+@freezed
+class LoginResponse with _$LoginResponse {
+  const factory LoginResponse({
+    required bool error,
+    required String message,
+    LoginResult? loginResult,
+  }) = _LoginResponse;
 
-  LoginResponse({
-    required this.error,
-    required this.message,
-    this.loginResult,
-  });
-
-  factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
+  factory LoginResponse.fromJson(Map<String, dynamic> json) =>
+      _$LoginResponseFromJson(json);
 }
 
-@JsonSerializable()
-class LoginResult {
-  final String userId;
-  final String name;
-  final String token;
+@freezed
+class LoginResult with _$LoginResult {
+  const factory LoginResult({
+    required String userId,
+    required String name,
+    required String token,
+  }) = _LoginResult;
 
-  LoginResult({
-    required this.userId,
-    required this.name,
-    required this.token,
-  });
-
-  factory LoginResult.fromJson(Map<String, dynamic> json) => _$LoginResultFromJson(json);
-
-  Map<String, dynamic> toJson() => _$LoginResultToJson(this);
+  factory LoginResult.fromJson(Map<String, dynamic> json) =>
+      _$LoginResultFromJson(json);
 }

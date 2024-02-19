@@ -1,32 +1,25 @@
-import 'dart:io';
-
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'add_story_dto.g.dart';
+part 'add_story_dto.freezed.dart';
 
-class AddStoryRequest {
-  final String description;
-  final File photo;
-  final double? lat;
-  final double? lon;
-
-  AddStoryRequest({
-    required this.description,
-    required this.photo,
-    this.lat,
-    this.lon,
-  });
+@freezed
+class AddStoryRequest with _$AddStoryRequest {
+  const factory AddStoryRequest({
+    required String description,
+    required String photo,
+    double? lat,
+    double? lon,
+  }) = _AddStoryRequest;
 }
 
-@JsonSerializable()
-class AddStoryResponse {
-  final bool error;
-  final String message;
-
-  AddStoryResponse({required this.error, required this.message});
+@freezed
+class AddStoryResponse with _$AddStoryResponse {
+  const factory AddStoryResponse({
+    required bool error,
+    required String message,
+  }) = _AddStoryResponse;
 
   factory AddStoryResponse.fromJson(Map<String, dynamic> json) =>
       _$AddStoryResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AddStoryResponseToJson(this);
 }

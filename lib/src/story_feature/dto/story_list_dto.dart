@@ -1,33 +1,27 @@
-import 'package:json_annotation/json_annotation.dart';
+// ignore_for_file: invalid_annotation_target
+
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:story_app/src/story_feature/model/story.dart';
 
 part 'story_list_dto.g.dart';
-class StoryListRequest {
-  final int? page;
-  final int? size;
-  final int? location;
+part 'story_list_dto.freezed.dart';
 
-  StoryListRequest({
-    this.page,
-    this.size,
-    this.location,
-  });
+@freezed
+class StoryListRequest with _$StoryListRequest {
+  const factory StoryListRequest({
+    int? page,
+    int? size,
+    int? location,
+  }) = _StoryListRequest;
 }
 
-@JsonSerializable()
-class StoryListResponse {
-  final bool error;
-  final String message;
-  @JsonKey(name: 'listStory')
-  final List<Story> storyList;
-
-  StoryListResponse({
-    required this.error,
-    required this.message,
-    required this.storyList,
-  });
+@freezed
+class StoryListResponse with _$StoryListResponse {
+  const factory StoryListResponse({
+    required bool error,
+    required String message,
+    @JsonKey(name: 'listStory') required List<Story> storyList,
+  }) = _StoryListResponse;
 
   factory StoryListResponse.fromJson(json) => _$StoryListResponseFromJson(json);
- 
-  Map<String, dynamic> toJson() => _$StoryListResponseToJson(this);
 }

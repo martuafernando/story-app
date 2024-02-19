@@ -60,9 +60,7 @@ class StoryRouterDelegate extends RouterDelegate
         if (_isSettingPage)
           MaterialPage(
             key: const ValueKey("SettingView"),
-            child: SettingsView(
-              provider: settingsController
-            ),
+            child: SettingsView(provider: settingsController),
           ),
       ];
 

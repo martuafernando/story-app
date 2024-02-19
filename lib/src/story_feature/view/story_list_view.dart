@@ -75,7 +75,9 @@ class StoryListView extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () { goToSettingView(); },
+            onPressed: () {
+              goToSettingView();
+            },
           ),
         ],
       ),
