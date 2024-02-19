@@ -22,33 +22,29 @@ class StoryListView extends StatelessWidget {
 
   Widget _buildList(BuildContext context) {
     return Consumer<StoryProvider>(builder: (context, provider, _) {
-      if (provider.state == ResultState.loading) {
+      final state = provider.listStoryResultState;
+
+      return state.map(loading: (value) {
         return const Center(
           child: CircularProgressIndicator(),
         );
-      }
-
-      if (provider.state == ResultState.hasData) {
+      }, noData: (value) {
+        return Center(
+          child: Text(value.message),
+        );
+      }, hasData: (value) {
         return ListView.builder(
           shrinkWrap: true,
-          itemCount: provider.storyList.length,
+          itemCount: value.data.length,
           itemBuilder: (context, index) {
-            var story = provider.storyList[index];
+            var story = value.data[index];
             return CardStory(
               story: story,
               onTapped: onTapped,
             );
           },
         );
-      }
-
-      if (provider.state == ResultState.noData) {
-        return Center(
-          child: Text(provider.message),
-        );
-      }
-
-      if (provider.state == ResultState.error) {
+      }, error: (error) {
         return AlertDialog(
           title: const Text('Error'),
           content: const Text('An error occurred. Cannot connect to server'),
@@ -59,11 +55,7 @@ class StoryListView extends StatelessWidget {
             ),
           ],
         );
-      }
-
-      return const Material(
-        child: Text(''),
-      );
+      });
     });
   }
 

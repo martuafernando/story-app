@@ -1,10 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:story_app/src/story_feature/model/list_story_result_state.dart';
 import 'package:story_app/src/story_feature/model/story.dart';
+import 'package:story_app/src/story_feature/model/story_result_state.dart';
 import 'package:story_app/src/story_feature/provider/story_repository.dart';
-
-enum ResultState { loading, noData, hasData, error }
 
 class StoryProvider extends ChangeNotifier {
   final StoryRepository storyRepository;
@@ -13,19 +13,24 @@ class StoryProvider extends ChangeNotifier {
     fetchAllStory();
   }
 
-  late ResultState _state;
+  late ListStoryResultState _listStoryResultstate = const ListStoryResultState.noData('Not initialized');
+  late StoryResultState _storyResultState = const StoryResultState.noData('Not initialized');
+
   late List<Story> _storyList = [];
   late Story _story;
   String _message = '';
 
   String get message => _message;
-  ResultState get state => _state;
+  
+  ListStoryResultState get listStoryResultState => _listStoryResultstate;
+  StoryResultState get storyResultState => _storyResultState;
+
   List<Story> get storyList => _storyList;
   Story get story => _story;
 
   Future<void> fetchAllStory() async {
     try {
-      _state = ResultState.loading;
+      _listStoryResultstate = const ListStoryResultState.loading();
       notifyListeners();
 
       final response = await storyRepository.getStoryList();
@@ -35,16 +40,16 @@ class StoryProvider extends ChangeNotifier {
       );
 
       if (response.isEmpty) {
-        _state = ResultState.noData;
+        _listStoryResultstate = ListStoryResultState.noData(message);
         notifyListeners();
         _message = 'Empty Data';
       }
 
-      _state = ResultState.hasData;
+      _listStoryResultstate = ListStoryResultState.hasData(response);
       notifyListeners();
       _storyList = response;
     } catch (e) {
-      _state = ResultState.error;
+      _listStoryResultstate = ListStoryResultState.error(e.toString());
       notifyListeners();
       log(
         name: 'STORY_PROVIDER::FETCH_ALL_STORY',
@@ -56,7 +61,7 @@ class StoryProvider extends ChangeNotifier {
 
   Future<void> fetchDetailStory(String storyId) async {
     try {
-      _state = ResultState.loading;
+      _storyResultState = const StoryResultState.loading();
       Future.microtask(
         () => notifyListeners(),
       );
@@ -68,20 +73,20 @@ class StoryProvider extends ChangeNotifier {
       );
 
       if (response == null) {
-        _state = ResultState.noData;
+        _storyResultState = StoryResultState.noData(message);
         Future.microtask(
           () => notifyListeners(),
         );
         _message = 'Empty Data';
       }
 
-      _state = ResultState.hasData;
-      _story = response!;
+      _storyResultState = StoryResultState.hasData(response!);
+      _story = response;
       Future.microtask(
         () => notifyListeners(),
       );
     } catch (e) {
-      _state = ResultState.error;
+      _storyResultState = StoryResultState.error(e.toString());
       Future.microtask(
         () => notifyListeners(),
       );

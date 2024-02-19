@@ -5,7 +5,11 @@ class CardStory extends StatelessWidget {
   final Story story;
   final Function onTapped;
 
-  const CardStory({super.key, required this.story, required this.onTapped});
+  const CardStory({
+    super.key,
+    required this.story,
+    required this.onTapped,
+  });
 
   @override
   Widget build(BuildContext context) {

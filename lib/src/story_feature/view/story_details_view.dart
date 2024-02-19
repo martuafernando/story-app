@@ -32,24 +32,19 @@ class _StoryDetailsViewState extends State<StoryDetailsView> {
 
 Widget _buildPage(BuildContext context, String storyId) {
   return Consumer<StoryProvider>(builder: (context, provider, _) {
-    if (provider.state == ResultState.loading) {
+    final state = provider.storyResultState;
+
+    return state.map(loading: (value) {
       return const Center(
         child: CircularProgressIndicator(),
       );
-    }
-
-    if (provider.state == ResultState.hasData) {
-      var story = provider.story;
-      return _pageTemplate(context, story);
-    }
-
-    if (provider.state == ResultState.noData) {
+    }, noData: (value) {
       return Center(
         child: Text(provider.message),
       );
-    }
-
-    if (provider.state == ResultState.error) {
+    }, hasData: (value) {
+      return _pageTemplate(context, value.data);
+    }, error: (error) {
       return AlertDialog(
         title: const Text('Error'),
         content: const Text('An error occurred. Cannot connect to server'),
@@ -60,11 +55,7 @@ Widget _buildPage(BuildContext context, String storyId) {
           ),
         ],
       );
-    }
-
-    return const Material(
-      child: Text(''),
-    );
+    });
   });
 }
 
