@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'dart:typed_data';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image/image.dart' as img;
 import 'package:story_app/src/auth/auth_repository.dart';
 import 'package:story_app/src/data/api/api_service.dart';
@@ -49,7 +50,11 @@ class StoryRepository {
   }
 
   Future<AddStoryResponse> addStory(
-      List<int> bytes, String fileName, String description) async {
+    List<int> bytes,
+    String fileName,
+    String description,
+    LatLng? location,
+  ) async {
     final String? token = await authRepository.getToken();
 
     if (token == null) {
@@ -62,6 +67,7 @@ class StoryRepository {
       bytes: bytesCompressed,
       fileName: fileName,
       description: description,
+      location: location,
     );
 
     log(

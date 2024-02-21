@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app/src/maps_feature/pick_location_view.dart';
 import 'package:story_app/src/shared/widget/platform_widget.dart';
 import 'package:story_app/src/story_feature/provider/add_story_provider.dart';
 
@@ -17,6 +19,7 @@ class AddStoryView extends StatefulWidget {
 
 class _AddStoryViewState extends State<AddStoryView> {
   final descriptionController = TextEditingController();
+  LatLng? selectedLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +84,17 @@ class _AddStoryViewState extends State<AddStoryView> {
               ],
             ),
           ),
+          SizedBox(
+            height: 400,
+            child: PickLocationView(
+              onLocationSelected: (latLng) {
+                setState(() {
+                  selectedLocation = latLng;
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 96)
         ],
       ),
     );
@@ -153,6 +167,7 @@ class _AddStoryViewState extends State<AddStoryView> {
       bytes,
       fileName,
       description,
+      selectedLocation
     );
 
     if (provider.successUpload != null) {

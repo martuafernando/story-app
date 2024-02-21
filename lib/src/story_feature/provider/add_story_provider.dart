@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:story_app/src/story_feature/provider/story_repository.dart';
 
 class AddStoryProvider extends ChangeNotifier {
@@ -17,6 +18,7 @@ class AddStoryProvider extends ChangeNotifier {
     List<int> bytes,
     String fileName,
     String description,
+    LatLng? location,
   ) async {
     try {
       message = "";
@@ -25,7 +27,7 @@ class AddStoryProvider extends ChangeNotifier {
       notifyListeners();
 
       final response =
-          await storyRepository.addStory(bytes, fileName, description);
+          await storyRepository.addStory(bytes, fileName, description, location);
       successUpload = !response.error;
       message = response.message;
       isUploading = false;
