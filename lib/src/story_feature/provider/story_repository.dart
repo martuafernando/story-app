@@ -16,14 +16,18 @@ class StoryRepository {
 
   StoryRepository({required this.apiService, required this.authRepository});
 
-  Future<List<Story>> getStoryList() async {
+  Future<List<Story>> getStoryList(int? page, int? size) async {
     final String? token = await authRepository.getToken();
 
     if (token == null) {
       return [];
     }
 
-    final StoryListResponse response = await apiService.getStoryList(token);
+    final StoryListResponse response = await apiService.getStoryList(
+      token: token,
+      page: page,
+      size: size,
+    );
     log(
       name: 'STORY_REPOSITORY::GET_STORY_LIST',
       response.toString(),

@@ -13,8 +13,15 @@ import 'package:story_app/src/story_feature/dto/story_list_dto.dart';
 class ApiService {
   static const String _baseUrl = 'https://story-api.dicoding.dev/v1';
 
-  Future<StoryListResponse> getStoryList(String token) async {
-    final response = await http.get(Uri.parse("$_baseUrl/stories"), headers: {
+  Future<StoryListResponse> getStoryList({
+    required String token,
+    int? page,
+    int? size,
+  }) async {
+    final String url = page != null && size != null
+        ? "$_baseUrl/stories?page=$page&size=$size"
+        : "$_baseUrl/stories";
+    final response = await http.get(Uri.parse(url), headers: {
       "Authorization": "Bearer $token",
     });
     log(

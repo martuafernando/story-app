@@ -79,7 +79,7 @@ class StoryRouterDelegate extends RouterDelegate
           return false;
         }
 
-        Provider.of<StoryProvider>(context, listen: false).fetchAllStory();
+        Provider.of<StoryProvider>(context, listen: false).initialAllStory();
 
         _selectedStoryId = null;
         _isAddNewStory = false;

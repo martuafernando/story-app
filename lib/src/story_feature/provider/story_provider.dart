@@ -8,32 +8,45 @@ import 'package:story_app/src/story_feature/provider/story_repository.dart';
 
 class StoryProvider extends ChangeNotifier {
   final StoryRepository storyRepository;
+  int? pageItems = 1;
+  int sizeItems = 5;
 
   StoryProvider({required this.storyRepository}) {
     fetchAllStory();
   }
 
-  late ListStoryResultState _listStoryResultstate = const ListStoryResultState.noData('Not initialized');
-  late StoryResultState _storyResultState = const StoryResultState.noData('Not initialized');
+  late ListStoryResultState _listStoryResultstate =
+      const ListStoryResultState.noData('Not initialized');
+  late StoryResultState _storyResultState =
+      const StoryResultState.noData('Not initialized');
 
   late List<Story> _storyList = [];
   late Story _story;
   String _message = '';
 
   String get message => _message;
-  
+
   ListStoryResultState get listStoryResultState => _listStoryResultstate;
   StoryResultState get storyResultState => _storyResultState;
 
-  List<Story> get storyList => _storyList;
   Story get story => _story;
+
+  Future<void> initialAllStory() async {
+    pageItems = 1;
+    fetchAllStory();
+  }
 
   Future<void> fetchAllStory() async {
     try {
-      _listStoryResultstate = const ListStoryResultState.loading();
-      notifyListeners();
+      if (pageItems == 1) {
+        _listStoryResultstate = const ListStoryResultState.loading();
+        notifyListeners();
+      }
 
-      final response = await storyRepository.getStoryList();
+      final response = await storyRepository.getStoryList(
+        pageItems,
+        sizeItems,
+      );
       log(
         name: 'STORY_PROVIDER::FETCH_ALL_STORY',
         response.toString(),
@@ -45,9 +58,16 @@ class StoryProvider extends ChangeNotifier {
         _message = 'Empty Data';
       }
 
-      _listStoryResultstate = ListStoryResultState.hasData(response);
+      if (response.length < sizeItems) {
+        pageItems = null;
+      } else {
+        pageItems = pageItems! + 1;
+      }
+      
+      _storyList = [..._storyList, ...response];
+      _listStoryResultstate = ListStoryResultState.hasData(_storyList);
+
       notifyListeners();
-      _storyList = response;
     } catch (e) {
       _listStoryResultstate = ListStoryResultState.error(e.toString());
       notifyListeners();

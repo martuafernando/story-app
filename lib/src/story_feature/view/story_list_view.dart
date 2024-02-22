@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/src/story_feature/model/story.dart';
 import 'package:story_app/src/story_feature/provider/story_provider.dart';
 import 'package:story_app/src/story_feature/widget/card_story.dart';
 
-class StoryListView extends StatelessWidget {
+class StoryListView extends StatefulWidget {
   final Function onSignOut;
   final Function onTapped;
   final Function goToAddStory;
@@ -20,6 +22,34 @@ class StoryListView extends StatelessWidget {
     required this.goToSettingView,
   });
 
+  @override
+  State<StoryListView> createState() => _StoryListViewState();
+}
+
+class _StoryListViewState extends State<StoryListView> {
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    final storyProvider = context.read<StoryProvider>();
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent) {
+        if (storyProvider.pageItems != null) {
+          storyProvider.fetchAllStory();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
   Widget _buildList(BuildContext context) {
     return Consumer<StoryProvider>(builder: (context, provider, _) {
       final state = provider.listStoryResultState;
@@ -34,13 +64,22 @@ class StoryListView extends StatelessWidget {
         );
       }, hasData: (value) {
         return ListView.builder(
+          controller: scrollController,
           shrinkWrap: true,
-          itemCount: value.data.length,
+          itemCount: value.data.length + (provider.pageItems != null ? 1 : 0),
           itemBuilder: (context, index) {
-            var story = value.data[index];
+            if (index == value.data.length && provider.pageItems != null) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            final story = value.data[index];
             return CardStory(
               story: story,
-              onTapped: onTapped,
+              onTapped: widget.onTapped,
             );
           },
         );
@@ -68,7 +107,7 @@ class StoryListView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              goToSettingView();
+              widget.goToSettingView();
             },
           ),
         ],
@@ -81,7 +120,7 @@ class StoryListView extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: FloatingActionButton(
                 onPressed: () {
-                  goToAddStory();
+                  widget.goToAddStory();
                 },
                 child: const Icon(Icons.add),
               ),
@@ -91,7 +130,7 @@ class StoryListView extends StatelessWidget {
             alignment: Alignment.bottomRight,
             child: FloatingActionButton(
               onPressed: () {
-                onSignOut();
+                widget.onSignOut();
               },
               backgroundColor: Colors.red,
               child: const Icon(Icons.logout_outlined),
