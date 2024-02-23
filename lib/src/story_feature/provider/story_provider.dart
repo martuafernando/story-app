@@ -33,7 +33,8 @@ class StoryProvider extends ChangeNotifier {
 
   Future<void> initialAllStory() async {
     pageItems = 1;
-    fetchAllStory();
+    _storyList = [];
+    await fetchAllStory();
   }
 
   Future<void> fetchAllStory() async {
