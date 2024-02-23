@@ -67,11 +67,13 @@ class AppRouterDelegate extends RouterDelegate
           ActiveService.auth => MaterialPage(
               child: Router(
                 routerDelegate: authRouterDelegate,
+                backButtonDispatcher: RootBackButtonDispatcher(),
               ),
             ),
           ActiveService.story => MaterialPage(
               child: Router(
                 routerDelegate: storyRouterDelegate,
+                backButtonDispatcher: RootBackButtonDispatcher(),
               ),
             ),
         },
