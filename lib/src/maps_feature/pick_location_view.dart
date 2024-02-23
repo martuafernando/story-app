@@ -51,6 +51,7 @@ class _MapsfeatureViewState extends State<PickLocationView> {
       if (!serviceEnabled) {
         return;
       }
+      
     }
     permissionGranted = await location.hasPermission();
     if (permissionGranted == PermissionStatus.denied) {
